@@ -6,6 +6,14 @@ import pyautogui
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5000
 
+# Initialize spatial values
+x = 0
+y = 0
+z = 0
+x_theta = 0
+y_theta = 0
+z_theta = 0
+
 # Create a UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
