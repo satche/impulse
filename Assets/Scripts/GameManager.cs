@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // Update the player position according to the data received from the server
         if (playerUdpClient.IsConnected())
         {
             PositionManager pm = player.GetComponent<PositionManager>();
