@@ -6,6 +6,10 @@ import pyautogui
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5000
 
+# File to read data from
+# Format is: 
+DATA = "data-30sec.txt"
+
 # Initialize spatial values
 x = 0
 y = 0
@@ -18,14 +22,44 @@ z_theta = 0
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # Aggregate values into a string
-# (x, y, z, x_theta, y_theta, z_theta)
+# Output format: (x, y, z, x_theta, y_theta, z_theta)
 def aggregateValuesToString(x, y, z, x_theta, y_theta, z_theta):
 	return str(x) + "," + str(y) + "," + str(z) + "," + str(x_theta) + "," + str(y_theta) + "," + str(z_theta)
 
-# Send values according to mouth position
-while True:
-	x = pyautogui.position()[0]
-	y = pyautogui.position()[1]
-	data = aggregateValuesToString(x, y, z, x_theta, y_theta, z_theta)
-	sock.sendto(data.encode(), (UDP_IP, UDP_PORT))
-	print("Sent: " + data)
+# Read data from file
+if DATA != "":
+
+	# If a file with data exist, let's use it
+	with open(DATA) as file:
+
+		for line in file:
+
+			# Split the line into strings (it's seperated by spaces)
+			strings = line.split('\x00')
+
+			# Split each string into values (seperated by _)
+			for string in strings:
+
+				values = string.split('_')
+					
+				# Assign values
+				timestamp, x, y, z, x_theta, y_theta, z_theta = values
+
+				# Send values
+				data = aggregateValuesToString(x, y, z, x_theta, y_theta, z_theta)
+				sock.sendto(data.encode(), (UDP_IP, UDP_PORT))
+
+				print(data)
+			
+				# Sleep for 0.1 seconds
+				time.sleep(0.01)
+
+# If no file with data exist, let's use mouse position
+else:
+	while True:
+		# Use mouse position as data instead
+		x = pyautogui.position()[0]
+		y = pyautogui.position()[1]
+		data = aggregateValuesToString(x, y, z, x_theta, y_theta, z_theta)
+		sock.sendto(data.encode(), (UDP_IP, UDP_PORT))
+		print("Sent: " + data)
