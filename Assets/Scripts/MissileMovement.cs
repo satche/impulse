@@ -5,17 +5,16 @@ using UnityEngine;
 public class MissileMovement : MonoBehaviour
 {
     public float speed = 5f;
-    private Transform playerTransform;
-
-    void Start()
-    {
-        playerTransform = GameObject.Find("Player").transform;
-    }
 
     void Update()
     {
-        // Move the projectile towards the player
-        Vector3 direction = (playerTransform.position - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
+        // Move the projectile in straight line
+        transform.Translate(Vector3.back * speed * Time.deltaTime);
+
+        // When this projectile is out of screen, destroy it
+        if (transform.position.z < -10)
+        {
+            Destroy(gameObject);
+        }
     }
 }

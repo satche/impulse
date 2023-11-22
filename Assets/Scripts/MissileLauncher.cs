@@ -6,13 +6,18 @@ public class MissileLauncher : MonoBehaviour
 {
 
     public GameObject missilePrefab;
+
+
+    [Tooltip("In seconds")]
     public float spawnInterval = 2f;
-    public float spawnDistance = 10f;
+    [Tooltip("In meters")]
+    public float axisDelta = 3f;
 
     private float timer;
 
     void Update()
     {
+        // Spawn a missile every x seconds
         timer += Time.deltaTime;
         if (timer >= spawnInterval)
         {
@@ -23,8 +28,11 @@ public class MissileLauncher : MonoBehaviour
 
     void LaunchMissile()
     {
-        Vector3 spawnPosition = Random.onUnitSphere * spawnDistance;
-        spawnPosition.y = 0; // Assuming you want to spawn at ground level
+
+        // Define spawn position at missile launcher position
+        Vector3 spawnPosition = transform.position;
+        spawnPosition.x += Random.Range(-axisDelta, axisDelta);
+        spawnPosition.y = 0; // Ground level spawn
 
         Instantiate(missilePrefab, spawnPosition, Quaternion.identity);
     }
