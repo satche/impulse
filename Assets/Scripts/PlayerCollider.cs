@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
+
+    // Store current material color
+    private Color originalColor;
+
+    void Start()
+    {
+        // Store the original color
+        originalColor = GetComponent<Renderer>().material.color;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         // Change color of the Player
-        GetComponent<Renderer>().material.color = Color.red;
+        GetComponent<Renderer>().material.color = Color.green;
 
         // Remove the projectile from the scene
         Destroy(other.gameObject);
 
-        // Start a coroutine to wait for x second before changing the color back to white
+        // Start a coroutine to wait for x second before changing the color back to original
         StartCoroutine(ChangeColorBack());
     }
 
@@ -22,6 +32,6 @@ public class PlayerCollider : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
 
         // Change the color back to white
-        GetComponent<Renderer>().material.color = Color.white;
+        GetComponent<Renderer>().material.color = originalColor;
     }
 }

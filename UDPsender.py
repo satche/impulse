@@ -7,8 +7,9 @@ UDP_IP = "127.0.0.1"
 UDP_PORT = 5000
 
 # File to read data from
-# Format is: 
-DATA = "data-30sec.txt"
+# DATA = "data-30sec.txt"
+DATA = ""
+refreshRate = 0.02
 
 # Initialize spatial values
 x = 0
@@ -25,6 +26,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Output format: (x, y, z, x_theta, y_theta, z_theta)
 def aggregateValuesToString(x, y, z, x_theta, y_theta, z_theta):
 	return str(x) + "," + str(y) + "," + str(z) + "," + str(x_theta) + "," + str(y_theta) + "," + str(z_theta)
+
 
 # Read data from file
 if DATA != "":
@@ -52,14 +54,15 @@ if DATA != "":
 				print(data)
 			
 				# Sleep for 0.1 seconds
-				time.sleep(0.01)
+				time.sleep(refreshRate)
 
 # If no file with data exist, let's use mouse position
 else:
 	while True:
 		# Use mouse position as data instead
 		x = pyautogui.position()[0]
-		y = pyautogui.position()[1]
+		z = pyautogui.position()[1]
 		data = aggregateValuesToString(x, y, z, x_theta, y_theta, z_theta)
 		sock.sendto(data.encode(), (UDP_IP, UDP_PORT))
 		print("Sent: " + data)
+		time.sleep(refreshRate)
