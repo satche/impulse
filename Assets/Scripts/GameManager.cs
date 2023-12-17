@@ -51,10 +51,6 @@ public class GameManager : MonoBehaviour
             float vertical = Input.GetAxis("Vertical");
             Vector3 movement = player.transform.right * horizontal + player.transform.forward * vertical;
             player.transform.position += movement * Time.deltaTime * movementSensibility;
-
-            // Align the player's altitude with the road
-            player.transform.position = new Vector3(player.transform.position.x, movement.y, player.transform.position.z);
-
         }
     }
 }
