@@ -246,12 +246,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd8547f71215429c8bc5b9ee9b4ea2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadPartEnd: {fileID: 6975009990580726093, guid: dea9f19d7ee1f6a47a85b54be31cb9b0, type: 3}
+  roadLength: 4
   roadParts:
   - {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
-  - {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
   - {fileID: 8585951724559993714, guid: 28949f33c1e61e24db19c0b7c159f9b6, type: 3}
-  - {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
+  roadPartEnd: {fileID: 6975009990580726093, guid: dea9f19d7ee1f6a47a85b54be31cb9b0, type: 3}
 --- !u!4 &786831163
 Transform:
   m_ObjectHideFlags: 0
@@ -361,7 +360,7 @@ Transform:
   m_GameObject: {fileID: 3435548680013223935}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.44, z: -4.2}
+  m_LocalPosition: {x: 1.25, y: 0.4, z: 1.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
