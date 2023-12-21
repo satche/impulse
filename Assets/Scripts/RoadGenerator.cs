@@ -11,10 +11,6 @@ public class RoadGenerator : MonoBehaviour
     [Tooltip("List of the different GameObject to use to create the road")]
     public List<GameObject> roadParts;
 
-    [Tooltip("Last GameObject to use to end the road")]
-    public GameObject roadPartEnd;
-
-    // List of the road parts instances used to display the road
     private List<GameObject> roadPartsInstances = new List<GameObject>();
 
     void Start()
@@ -22,31 +18,26 @@ public class RoadGenerator : MonoBehaviour
         // Generate the road
         for (int i = 0; i < roadLength; i++)
         {
-            Vector3 roadPartPosition;
-
             // Take a random road part from the list
             int random = Random.Range(0, roadParts.Count);
-            random = 0; // test with only straight road
             GameObject roadPart = roadParts[random];
 
-            // Is there a road part instance already?
-            if (gameObject.transform.childCount > 0)
-            {
-                // If yes, display the next road part after the last one
-                Transform lastRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 1);
-                roadPartPosition = lastRoadPart.position + new Vector3(0, 0, 8);
-            }
-            else
-            {
-                // If not, display the first road part at the origin
-                roadPartPosition = gameObject.transform.position;
-            }
-
-            // Instantiate the road part as a child of the road
-            GameObject roadPartInstance = Instantiate(roadPart, roadPartPosition, Quaternion.identity);
+            // Instantiate the road part, put it in current GameObject origin
+            int roadPartInstanceCount = gameObject.transform.childCount;
+            GameObject roadPartInstance = Instantiate(roadPart, gameObject.transform.position, Quaternion.identity);
             roadPartInstance.transform.SetParent(gameObject.transform);
+
+            // If it's not the first road part, put it at the end of the previous one
+            if (roadPartInstanceCount > 0)
+            {
+                GameObject previousRoadPart = gameObject.transform.GetChild(roadPartInstanceCount - 1).gameObject;
+                GameObject previousRoadPartEnd = previousRoadPart.transform.Find("End").gameObject;
+                GameObject roadPartInstanceStart = roadPartInstance.transform.Find("Start").gameObject;
+                
+                roadPartInstance.transform.rotation = previousRoadPartEnd.transform.rotation;
+                Vector3 offset = roadPartInstanceStart.transform.position - roadPartInstance.transform.position;
+                roadPartInstance.transform.position = previousRoadPartEnd.transform.position - offset;
+            }
         }
-
     }
-
 }
