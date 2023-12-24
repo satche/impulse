@@ -226,7 +226,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 786831163}
-  - component: {fileID: 786831162}
+  - component: {fileID: 786831164}
   m_Layer: 0
   m_Name: Road
   m_TagString: Untagged
@@ -234,7 +234,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &786831162
+--- !u!4 &786831163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786831161}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &786831164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,26 +261,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd8547f71215429c8bc5b9ee9b4ea2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadLength: 6
   roadParts:
-  - {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
-  - {fileID: 8585951724559993714, guid: 28949f33c1e61e24db19c0b7c159f9b6, type: 3}
-  - {fileID: 8585951724559993714, guid: 19cd5b5741dca412393fd310177e0b27, type: 3}
---- !u!4 &786831163
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786831161}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  - partName: straight
+    gameObject: {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
+    iterations: 12
+  - partName: right
+    gameObject: {fileID: 8585951724559993714, guid: 28949f33c1e61e24db19c0b7c159f9b6, type: 3}
+    iterations: 6
+  - partName: left
+    gameObject: {fileID: 8585951724559993714, guid: b4b5f160f8b654cbdbbe9b2e2feb11dd, type: 3}
+    iterations: 7
 --- !u!1 &1142058189
 GameObject:
   m_ObjectHideFlags: 0

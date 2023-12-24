@@ -4,6 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Turn Right
+  - Turn Left
   - Road Turn
   layers:
   - Default
