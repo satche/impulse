@@ -115,6 +115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2064731755621451604}
+  - component: {fileID: 1268441486949606184}
   m_Layer: 0
   m_Name: Road Part Right (Large)
   m_TagString: Untagged
@@ -145,6 +146,27 @@ Transform:
   - {fileID: 9160115059961837441}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1268441486949606184
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723953122851249646}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12.952383, y: 0.71833396, z: 11.718334}
+  m_Center: {x: 0.9761915, y: 0.5, z: -1}
 --- !u!1 &4675476734211892028
 GameObject:
   m_ObjectHideFlags: 0
