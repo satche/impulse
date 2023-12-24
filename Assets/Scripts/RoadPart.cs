@@ -11,6 +11,6 @@ public class RoadPart
 	public GameObject gameObject;
 
 	[Tooltip("How many time this road part appears in the road")]
-	[Range(1, 100)]
+	[Range(1, 30)]
 	public int iterations;
 }

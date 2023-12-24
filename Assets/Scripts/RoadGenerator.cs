@@ -18,7 +18,7 @@ public class RoadGenerator : MonoBehaviour
     {
         roadPartPendingList = CreatePendingList(roadPartBlueprintList);
         roadPartPendingList = ShuffleList(roadPartPendingList);
-        GenerateRoad(); // TODO: generate road from list in param
+        GenerateRoad();
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class RoadGenerator : MonoBehaviour
 
                 if (isColliding(nextRoadPart))
                 {
-                    fixRoad(previousRoadPart, nextRoadPart, i);
+                    fixRoad(previousRoadPart, nextRoadPart, i, 0);
                 }
             }
         }
@@ -87,13 +87,11 @@ public class RoadGenerator : MonoBehaviour
     /// <param name="previousRoadPart">The previous road part in the scene</param>
     /// <param name="badRoadPart">The bad road part that collide with another one</param>
     /// <param name="i">Current step in generation</param>
-    private void fixRoad(GameObject previousRoadPart, GameObject badRoadPart, int i)
+    /// <param name="recursionCount">Number of time the function has been called recursively</param>
+    private void fixRoad(GameObject previousRoadPart, GameObject badRoadPart, int i, int recursionCount = 0)
     {
         // Keep track of the road parts that has not been uses
         List<RoadPart> availableRoadParts = new List<RoadPart>(roadPartBlueprintList);
-
-        // Insert the badRoadPart at the end of the pending list
-        this.roadPartPendingList.Insert(this.roadPartPendingList.Count, this.roadPartPendingList[i]);
 
         for (int j = availableRoadParts.Count; j > 0; j--)
         {
@@ -110,7 +108,14 @@ public class RoadGenerator : MonoBehaviour
             DestroyImmediate(badRoadPart);
             GameObject oldPreviousRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 2).gameObject;
             GameObject oldNextRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject;
-            fixRoad(oldPreviousRoadPart, oldNextRoadPart, i - 1);
+            if (recursionCount > 5)
+            {
+                Debug.Log("Too many recursion, abort");
+                // Empty the pending list to stop the generation
+                this.roadPartPendingList.Clear();
+                return;
+            }
+            fixRoad(oldPreviousRoadPart, oldNextRoadPart, i - 1, recursionCount + 1);
         }
     }
 
@@ -120,7 +125,7 @@ public class RoadGenerator : MonoBehaviour
     /// <param name="badRoadPart">The roadPart to replace</param>
     /// <param name="availableRoadPartsList">The list to go look for another potential roadPart</param>
     /// <param name="index">The index of the roadPart to replace</param>
-    void replaceRoadPartInList(GameObject badRoadPart, List<RoadPart> availableRoadPartsList, int index)
+    private void replaceRoadPartInList(GameObject badRoadPart, List<RoadPart> availableRoadPartsList, int index)
     {
         // Remove bad road part
         this.roadPartPendingList.RemoveAt(index);
