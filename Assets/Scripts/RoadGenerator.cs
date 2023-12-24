@@ -81,29 +81,30 @@ public class RoadGenerator : MonoBehaviour
         }
     }
 
-    private void fixRoad(GameObject previousRoadPart, GameObject nextRoadPart, int i)
+    private void fixRoad(GameObject previousRoadPart, GameObject badRoadPart, int i)
     {
         // Keep track of the road parts that has not been uses
-        List<RoadPart> availableRoadParts = this.roadPartBlueprintList;
+        List<RoadPart> availableRoadParts = new List<RoadPart>(roadPartBlueprintList);
 
-        // Remove the road part that has been used from the available list
-        availableRoadParts.Remove(this.roadPartPendingList[i]);
+        // Add the badRoadPart one step later in the pending list
+        this.roadPartPendingList.Insert(i + 1, this.roadPartPendingList[i]);
 
-        for (int j = 0; j < availableRoadParts.Count; j++)
+        for (int j = availableRoadParts.Count; j > 0; j--)
         {
-            replaceRoadPartInList(nextRoadPart, availableRoadParts, i);
-            nextRoadPart = spawnRoadPartFromList(roadPartPendingList, i);
-            ConnectRoadParts(previousRoadPart, nextRoadPart);
-            if (!isColliding(nextRoadPart)) { break; }
+            replaceRoadPartInList(badRoadPart, availableRoadParts, i);
+            badRoadPart = spawnRoadPartFromList(roadPartPendingList, i);
+            ConnectRoadParts(previousRoadPart, badRoadPart);
+            if (!isColliding(badRoadPart)) { break; }
         }
 
         // If no more road part available and still colliding, step back and try again
-        if (availableRoadParts.Count == 0 && isColliding(nextRoadPart))
+        if (availableRoadParts.Count == 0 && isColliding(badRoadPart))
         {
-            // [WIP]
-            // this.roadPartPendingList.RemoveAt(i);
-            // DestroyImmediate(nextRoadPart);
-            // i--;
+            Debug.Log("Dead end: take one step back");
+            DestroyImmediate(badRoadPart);
+            GameObject oldPreviousRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 2).gameObject;
+            GameObject oldNextRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject;
+            fixRoad(oldPreviousRoadPart, oldNextRoadPart, i - 1);
         }
     }
 
@@ -115,22 +116,17 @@ public class RoadGenerator : MonoBehaviour
     /// <param name="index">The index of the roadPart to replace</param>
     void replaceRoadPartInList(GameObject badRoadPart, List<RoadPart> availableRoadPartsList, int index)
     {
-        // Check if the list is empty
-        if (availableRoadPartsList.Count == 0)
-        {
-            Debug.Log("No available road parts to replace with.");
-            return;
-        }
-
         // Remove bad road part
         this.roadPartPendingList.RemoveAt(index);
         availableRoadPartsList.Remove(availableRoadPartsList.Find(x => $"{x.gameObject.name} {index}" == badRoadPart.name));
         DestroyImmediate(badRoadPart);
 
+        // Check if the list is empty
+        if (availableRoadPartsList.Count == 0) { return; }
+
         // Replace with another one from the available list
         int randomIndex = Random.Range(0, availableRoadPartsList.Count);
         this.roadPartPendingList.Insert(index, availableRoadPartsList[randomIndex]);
-        Debug.Log($"New potential road part: {availableRoadPartsList[randomIndex].gameObject.name} {index}");
     }
 
     /// <summary>
@@ -147,7 +143,7 @@ public class RoadGenerator : MonoBehaviour
 
         // Put it at the road origin
         roadPartToSpawn.transform.SetParent(gameObject.transform);
-        roadPartToSpawn.name = $"{roadPartToSpawn.name} {index}";
+        roadPartToSpawn.name = $"{roadPartToInstantiate.gameObject.name} {index}";
 
         return roadPartToSpawn;
     }
@@ -186,11 +182,7 @@ public class RoadGenerator : MonoBehaviour
         foreach (Collider collider in colliders)
         {
             // There is collision only if it's not own road part collider and the object is a road part
-            if (collider != roadPartCollider && collider.gameObject.tag == "RoadPart")
-            {
-                Debug.Log($"{roadPart.name} collide with {collider.gameObject.name}");
-                isColliding = true;
-            }
+            if (collider != roadPartCollider && collider.gameObject.tag == "RoadPart") { isColliding = true; }
         }
 
         return isColliding;
