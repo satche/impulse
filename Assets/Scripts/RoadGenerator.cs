@@ -86,8 +86,8 @@ public class RoadGenerator : MonoBehaviour
         // Keep track of the road parts that has not been uses
         List<RoadPart> availableRoadParts = new List<RoadPart>(roadPartBlueprintList);
 
-        // Add the badRoadPart one step later in the pending list
-        this.roadPartPendingList.Insert(i + 1, this.roadPartPendingList[i]);
+        // Insert the badRoadPart at the end of the pending list
+        this.roadPartPendingList.Insert(this.roadPartPendingList.Count, this.roadPartPendingList[i]);
 
         for (int j = availableRoadParts.Count; j > 0; j--)
         {
