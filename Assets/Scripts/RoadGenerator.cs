@@ -2,51 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
 using static RoadPart;
 
 public class RoadGenerator : MonoBehaviour
 {
 
     [Tooltip("List of the different GameObject to use to create the road")]
-    public List<RoadPart> roadParts = new List<RoadPart>();
-    private List<GameObject> roadPartsToInstanciate = new List<GameObject>();
+    public List<RoadPart> roadPartBlueprintList = new List<RoadPart>();
+
+    // Pending list of Road Part ready to be instanciate in the scene
+    private List<GameObject> roadPartPendingList = new List<GameObject>();
 
     void Start()
     {
-        CreateRoadPartList();
-        ShuffleRoadPartList();
-        GenerateRoad();
+        roadPartPendingList = CreatePendingList(roadPartBlueprintList);
+        ShuffleList(roadPartPendingList); // TODO: return a shuffled list
+        GenerateRoad(); // TODO: generate road from list in param
     }
 
     /// <summary>
-    /// Create a list of road parts to use to generate the road
+    /// Create a list of road parts to use to generate the road, according to the defined road part iteration
     /// </summary>
-    private void CreateRoadPartList()
+    /// <param name="list">The RoadPart blueprint list to use to create the pending list</params>
+    /// <returns>The pending GameObject list</returns>
+
+    private List<GameObject> CreatePendingList(List<RoadPart> list)
     {
-        // Iterate in the roadParts list
-        foreach (RoadPart roadPart in roadParts)
+        List<GameObject> pendingList = new List<GameObject>();
+
+        // Iterate in the blueprint list
+        foreach (RoadPart roadPart in list)
         {
-            // Add the road part to the list as many times as the iterations value
+            // Add the road part to the pending list as many times as its iterations value
             for (int i = 0; i < roadPart.iterations; i++)
             {
-                roadPartsToInstanciate.Add(roadPart.gameObject);
+                pendingList.Add(roadPart.gameObject);
             }
         }
+
+        return pendingList;
     }
 
     /// <summary>
-    /// Shuffle the road part list<br/>
-    /// Make sure to avoid collisions between road parts
+    /// Shuffle a list of items
     /// </summary>
-    private void ShuffleRoadPartList()
+    /// <param name="list">The list to shuffle</params>
+    private void ShuffleList(List<GameObject> list)
     {
-        // Shuffle the list
-        for (int i = 0; i < roadPartsToInstanciate.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
-            GameObject temp = roadPartsToInstanciate[i];
-            int randomIndex = Random.Range(i, roadPartsToInstanciate.Count);
-            roadPartsToInstanciate[i] = roadPartsToInstanciate[randomIndex];
-            roadPartsToInstanciate[randomIndex] = temp;
+            GameObject temp = list[i];
+            int randomIndex = Random.Range(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
         }
     }
 
@@ -57,27 +66,61 @@ public class RoadGenerator : MonoBehaviour
     private void GenerateRoad()
     {
         // Generate the road
-        for (int i = 0; i < roadPartsToInstanciate.Count; i++)
+        for (int i = 0; i < roadPartPendingList.Count; i++)
         {
             Debug.Log($"Step {i}");
             int roadPartInstancesCount = gameObject.transform.childCount;
-
-            // Take the road part from the list
-            GameObject roadPartToInstantiate = roadPartsToInstanciate[i];
-
-            // Instantiate the road part, put it at the road origin
-            GameObject nextRoadPart = Instantiate(roadPartToInstantiate.gameObject, gameObject.transform.position, Quaternion.identity);
-            nextRoadPart.transform.SetParent(gameObject.transform);
-            nextRoadPart.name = $"{nextRoadPart.name} {i}";
+            GameObject nextRoadPart = spawnRoadPartFromList(roadPartPendingList, i);
 
             if (roadPartInstancesCount > 0)
             {
                 GameObject previousRoadPart = gameObject.transform.GetChild(roadPartInstancesCount - 1).gameObject;
                 ConnectRoadParts(previousRoadPart, nextRoadPart);
-                CheckCollision(nextRoadPart);
+
+                // Keep track of the potential road parts as replacement for this step
+                List<GameObject> availableRoadParts = roadPartBlueprintList.Select(roadPart => roadPart.gameObject).ToList();
+                if (isColliding(nextRoadPart))
+                {
+                    GameObject badRoadPart = nextRoadPart;
+
+                    // Replace the bad road part with another one
+                    Debug.Log($"Remove {badRoadPart.name}");
+                    roadPartPendingList.RemoveAt(i);
+                    availableRoadParts.Remove(badRoadPart);
+                    DestroyImmediate(badRoadPart);
+
+                    int randomIndex = Random.Range(0, availableRoadParts.Count);
+                    roadPartPendingList.Insert(i, availableRoadParts[randomIndex].gameObject);
+                    Debug.Log($"New potential road part: {availableRoadParts[randomIndex].gameObject.name}");
+
+                    nextRoadPart = spawnRoadPartFromList(roadPartPendingList, i);
+
+                    ConnectRoadParts(previousRoadPart, nextRoadPart);
+                    isColliding(nextRoadPart);
+                }
             }
         }
     }
+
+    /// <summary>
+    /// Instanciatee and place the next road part
+    /// </summary>
+    /// <param name="list">List that contains the road part to instantiate</param>
+    /// <param name="index">Index of the road part to instantiate</param>
+    /// <returns>The spawned RoadPart GameObject</returns>
+    private GameObject spawnRoadPartFromList(List<GameObject> list, int index)
+    {
+        // Instantiate the road part
+        GameObject roadPartToInstantiate = list[index];
+        GameObject roadPart = Instantiate(roadPartToInstantiate.gameObject, gameObject.transform.position, Quaternion.identity);
+
+        // Put it at the road origin
+        roadPart.transform.SetParent(gameObject.transform);
+        roadPart.name = $"{roadPart.name} {index}";
+
+        return roadPart;
+    }
+
 
     /// <summary>
     /// Connect the end of the previous road part to the start of the next one
@@ -100,22 +143,27 @@ public class RoadGenerator : MonoBehaviour
     /// </summary>
     /// <param name="roadPart">The road part to check</param>
     /// <returns>True if the road part collide with any other road part</returns>
-    private bool CheckCollision(GameObject roadPart)
+    private bool isColliding(GameObject roadPart)
     {
+        // Note: at this point, we need to sync the physic engine.
+        // If autoSyncTransforms is not enable in project settings, use Physics.SyncTransforms();
+
+        bool isColliding = false;
+
         // List all colliders that overlap this roadpart's collider
-        Physics.SyncTransforms();
         BoxCollider roadPartCollider = roadPart.GetComponent<BoxCollider>();
         Collider[] colliders = Physics.OverlapBox(roadPartCollider.bounds.center, roadPartCollider.bounds.extents / 2, roadPart.transform.rotation);
 
         foreach (Collider collider in colliders)
         {
+            // There is collision only if it's not own road part collider and the object is a road part
             if (collider != roadPartCollider && collider.gameObject.tag == "RoadPart")
             {
                 Debug.Log($"{roadPart.name} collide with {collider.gameObject.name}");
-
+                isColliding = true;
             }
         }
 
-        return false;
+        return isColliding;
     }
 }
