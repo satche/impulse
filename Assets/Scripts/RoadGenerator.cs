@@ -81,6 +81,12 @@ public class RoadGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Fix the road by replacing the bad road part with another one from the pending list
+    /// </summary>
+    /// <param name="previousRoadPart">The previous road part in the scene</param>
+    /// <param name="badRoadPart">The bad road part that collide with another one</param>
+    /// <param name="i">Current step in generation</param>
     private void fixRoad(GameObject previousRoadPart, GameObject badRoadPart, int i)
     {
         // Keep track of the road parts that has not been uses
@@ -147,7 +153,6 @@ public class RoadGenerator : MonoBehaviour
 
         return roadPartToSpawn;
     }
-
 
     /// <summary>
     /// Connect the end of the previous road part to the start of the next one
