@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
         else
         {
             // Give a constant movement toward the facing direction
+            // TODO: this should be in the PositionManager class
             Vector3 automaticMovement = player.transform.forward;
             player.transform.position += automaticMovement * Time.deltaTime * speed;
 

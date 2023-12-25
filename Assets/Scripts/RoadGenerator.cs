@@ -7,9 +7,14 @@ using static RoadPart;
 
 public class RoadGenerator : MonoBehaviour
 {
+    [Tooltip("The first road part, used as a starting point for the road")]
+    public RoadPart roadPartStart;
 
     [Tooltip("List of the different GameObject to use to create the road")]
     public List<RoadPart> roadPartBlueprintList = new List<RoadPart>();
+
+    [Tooltip("The last road part, used as a closing point for the road")]
+    public RoadPart roadPartEnd;
 
     // Pending list of Road Part ready to be instanciate in the scene
     private List<RoadPart> roadPartPendingList = new List<RoadPart>();
@@ -30,6 +35,9 @@ public class RoadGenerator : MonoBehaviour
     {
         List<RoadPart> pendingList = new List<RoadPart>();
 
+        // Add the first and last road part to the pending list
+        pendingList.Insert(0, roadPartStart);
+
         // Iterate in the blueprint list
         foreach (RoadPart roadPart in list)
         {
@@ -39,6 +47,9 @@ public class RoadGenerator : MonoBehaviour
                 pendingList.Add(roadPart);
             }
         }
+
+        // Add the last road part to the pending list
+        pendingList.Add(roadPartEnd);
 
         return pendingList;
     }
@@ -50,7 +61,20 @@ public class RoadGenerator : MonoBehaviour
     /// <returns>The shuffled list</returns>
     private List<RoadPart> ShuffleList(List<RoadPart> list)
     {
-        return list.OrderBy(x => Random.value).ToList();
+        // Extract temporarly the first and last road part
+        RoadPart firstRoadPart = list[0];
+        RoadPart lastRoadPart = list[list.Count - 1];
+        list.RemoveAt(0);
+        list.RemoveAt(list.Count - 1);
+
+        // Shuffle the list
+        List<RoadPart> shuffledList = list.OrderBy(x => Random.value).ToList();
+
+        // Put back the first and last road part
+        shuffledList.Insert(0, firstRoadPart);
+        shuffledList.Add(lastRoadPart);
+
+        return shuffledList;
     }
 
     /// <summary>
@@ -66,18 +90,16 @@ public class RoadGenerator : MonoBehaviour
             int roadPartInstancesCount = gameObject.transform.childCount;
 
             GameObject nextRoadPart = spawnRoadPartFromList(roadPartPendingList, i);
+            if (roadPartInstancesCount == 0) { continue; }
+            GameObject previousRoadPart = gameObject.transform.GetChild(roadPartInstancesCount - 1).gameObject;
 
-            if (roadPartInstancesCount > 0)
+            ConnectRoadParts(previousRoadPart, nextRoadPart);
+
+            if (isColliding(nextRoadPart))
             {
-                GameObject previousRoadPart = gameObject.transform.GetChild(roadPartInstancesCount - 1).gameObject;
-
-                ConnectRoadParts(previousRoadPart, nextRoadPart);
-
-                if (isColliding(nextRoadPart))
-                {
-                    fixRoad(previousRoadPart, nextRoadPart, i, 0);
-                }
+                fixRoad(previousRoadPart, nextRoadPart, i, 0);
             }
+
         }
     }
 
@@ -90,6 +112,7 @@ public class RoadGenerator : MonoBehaviour
     /// <param name="recursionCount">Number of time the function has been called recursively</param>
     private void fixRoad(GameObject previousRoadPart, GameObject badRoadPart, int i, int recursionCount = 0)
     {
+        Debug.Log($"Fixing road at step {i}");
         // Keep track of the road parts that has not been uses
         List<RoadPart> availableRoadParts = new List<RoadPart>(roadPartBlueprintList);
 
@@ -104,7 +127,7 @@ public class RoadGenerator : MonoBehaviour
         // If no more road part available and still colliding, step back and try again
         if (availableRoadParts.Count == 0 && isColliding(badRoadPart))
         {
-            Debug.Log("Dead end: take one step back");
+            Debug.Log("Can't fix road, take one step back");
             DestroyImmediate(badRoadPart);
             GameObject oldPreviousRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 2).gameObject;
             GameObject oldNextRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject;
@@ -187,12 +210,16 @@ public class RoadGenerator : MonoBehaviour
 
         // List all colliders that overlap this roadpart's collider
         BoxCollider roadPartCollider = roadPart.GetComponent<BoxCollider>();
-        Collider[] colliders = Physics.OverlapBox(roadPartCollider.bounds.center, roadPartCollider.bounds.extents / 2, roadPart.transform.rotation);
+        Collider[] colliders = Physics.OverlapBox(roadPartCollider.bounds.center, roadPartCollider.bounds.extents, roadPart.transform.rotation);
 
         foreach (Collider collider in colliders)
         {
             // There is collision only if it's not own road part collider and the object is a road part
-            if (collider != roadPartCollider && collider.gameObject.tag == "RoadPart") { isColliding = true; }
+            if (collider != roadPartCollider && collider.gameObject.tag == "RoadPart")
+            {
+                isColliding = true;
+                Debug.Log($"{roadPart.name} collides with {collider.gameObject.name}");
+            }
         }
 
         return isColliding;
