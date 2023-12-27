@@ -261,25 +261,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd8547f71215429c8bc5b9ee9b4ea2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadPartStart:
+    partName: 
+    gameObject: {fileID: 6975009990580726093, guid: a1fa38a11a81f42999940516752066ab, type: 3}
+    iterations: 0
   roadPartBlueprintList:
   - partName: 
     gameObject: {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
-    iterations: 16
+    iterations: 10
   - partName: 
     gameObject: {fileID: 8585951724559993714, guid: b4b5f160f8b654cbdbbe9b2e2feb11dd, type: 3}
-    iterations: 3
+    iterations: 2
   - partName: 
     gameObject: {fileID: 8585951724559993714, guid: 28949f33c1e61e24db19c0b7c159f9b6, type: 3}
-    iterations: 3
+    iterations: 2
   - partName: 
     gameObject: {fileID: 1723953122851249646, guid: a3872e110230647a38fcdb9fd2a39790, type: 3}
-    iterations: 7
+    iterations: 1
   - partName: 
     gameObject: {fileID: 1723953122851249646, guid: 66f129141c6df45d987003eb926fa34e, type: 3}
-    iterations: 8
+    iterations: 1
   - partName: 
     gameObject: {fileID: 7676730838238129658, guid: ad6371d12149647feb496dbcb2d83524, type: 3}
-    iterations: 4
+    iterations: 2
+  - partName: 
+    gameObject: {fileID: 7676730838238129658, guid: 459f4214f96084b6e97e2080dd949e15, type: 3}
+    iterations: 3
+  roadPartEnd:
+    partName: 
+    gameObject: {fileID: 6975009990580726093, guid: f7230e6ac6b6b4af3901f391df7e954a, type: 3}
+    iterations: 0
 --- !u!1 &1142058189
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce449671e9c7244b1baf9344110f11ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 3435548680013223935}
+  player: {fileID: 0}
   speed: 4
   rotationSensibility: 1
   movementSensibility: 1
@@ -339,8 +350,8 @@ GameObject:
   - component: {fileID: 9175619188550152351}
   - component: {fileID: 7571818783413064427}
   - component: {fileID: 4656571626671610993}
-  - component: {fileID: 9175619188550152352}
   - component: {fileID: 9175619188550152354}
+  - component: {fileID: 9175619188550152355}
   m_Layer: 0
   m_Name: Spaceship
   m_TagString: Untagged
@@ -357,7 +368,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4656643104030241511}
-  - component: {fileID: 4982273604680699396}
+  - component: {fileID: 4656643104030241512}
+  - component: {fileID: 4656643104030241513}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: Untagged
@@ -469,14 +481,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2559593326357429442}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7435185, y: -0, z: -0, w: 0.6687155}
-  m_LocalPosition: {x: -0.003000021, y: 1.8000001, z: 3.1548674}
-  m_LocalScale: {x: 100, y: 501.95813, z: 100.91195}
+  m_LocalRotation: {x: 0.8191521, y: -0, z: -0, w: 0.57357645}
+  m_LocalPosition: {x: 0, y: 0.106502146, z: 0.29941422}
+  m_LocalScale: {x: 99.90287, y: 350.9841, z: 110.464386}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9175619188550152351}
-  m_LocalEulerAnglesHint: {x: 6.064, y: 0, z: 0}
---- !u!20 &4982273604680699396
+  m_LocalEulerAnglesHint: {x: 4.238, y: 0, z: 0}
+--- !u!20 &4656643104030241512
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -493,8 +505,8 @@ Camera:
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
-  m_FocusDistance: 5
-  m_FocalLength: 36.9322
+  m_FocusDistance: 10
+  m_FocalLength: 50
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -507,11 +519,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.099999994
-  far clip plane: 250
-  field of view: 35.2
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60.000004
   orthographic: 0
-  orthographic size: 0.0023999608
+  orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -527,6 +539,19 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &4656643104030241513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2559593326357429442}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1192af22ca0f45518b04d715a0a535e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 3435548680013223935}
 --- !u!33 &7571818783413064427
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -544,34 +569,13 @@ Transform:
   m_GameObject: {fileID: 1285152187173184686}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0.19018245}
+  m_LocalPosition: {x: 0, y: 0, z: 0.3099997}
+  m_LocalScale: {x: 5.258107, y: 5.258107, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4656643104030241511}
   m_Father: {fileID: 2658907183217921349}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!65 &9175619188550152352
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1285152187173184686}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.47274685, y: 0.46223706, z: 1.3810735}
-  m_Center: {x: -0.0072369576, y: 0.004579067, z: 0.24421088}
 --- !u!54 &9175619188550152354
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -599,6 +603,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &9175619188550152355
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285152187173184686}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 0, z: 0.03}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
