@@ -4,9 +4,6 @@ using UnityEngine;
 [Serializable]
 public class RoadPart
 {
-	[Tooltip("Name of the road part. Used to identify the road part in the road generator")]
-	public string partName;
-
 	[Tooltip("The road part prefab")]
 	public GameObject gameObject;
 
