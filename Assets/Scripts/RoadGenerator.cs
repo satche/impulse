@@ -99,8 +99,7 @@ public class RoadGenerator : MonoBehaviour
 
             Debug.Log($"Step {this.step}");
 
-
-            GameObject nextRoadPart = spawnRoadPart(roadPartPendingList[this.step]);
+            GameObject nextRoadPart = SpawnRoadPart(roadPartPendingList[this.step]);
             if (spawnedRoadPartCount == 0) { continue; }
 
             GameObject previousRoadPart = this.gameObject.transform.GetChild(spawnedRoadPartCount - 1).gameObject;
@@ -177,9 +176,8 @@ public class RoadGenerator : MonoBehaviour
     /// Fix the road by replacing the bad road part with another one from the pending list.<br/>
     /// </summary>
     /// <remarks>
-    /// This method is a bit of a mess, but it seems to fix collisions between road part.
-    /// The "take one step back" part also seems to work, but some steps are missed after the generation.
-    /// So there is probably a better way to do this.
+    /// When we take a step back to fix the road, a road part is destroyed but never replaced.<br/>
+    /// This result of having shorter road than expected at the end of the generation.
     /// </remarks>
     /// <param name="previousRoadPart">The previous road part in the scene</param>
     /// <param name="badRoadPart">The bad road part that collide with another one</param>
@@ -203,7 +201,7 @@ public class RoadGenerator : MonoBehaviour
         for (int i = availableRoadParts.Count; i > 0; i--)
         {
             ReplaceRoadPartInList(badRoadPart, availableRoadParts);
-            GameObject newRoadPart = spawnRoadPart(this.roadPartPendingList[this.step]);
+            GameObject newRoadPart = SpawnRoadPart(this.roadPartPendingList[this.step]);
             ConnectRoadParts(previousRoadPart, newRoadPart);
 
             if (!IsColliding(newRoadPart)) { break; }
