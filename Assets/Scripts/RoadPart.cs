@@ -9,5 +9,5 @@ public class RoadPart
 
 	[Tooltip("How many time this road part appears in the road")]
 	[Range(1, 30)]
-	public int iterations;
+	public int iterations = 3;
 }
