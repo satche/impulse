@@ -156,7 +156,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -216,8 +216,8 @@ Transform:
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: -2.77, y: 11.37, z: -6.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 15.7, y: 14.2, z: -7.17}
+  m_LocalScale: {x: 1, y: 1, z: 0.42199}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -272,17 +272,19 @@ MonoBehaviour:
     iterations: 0
   roadPartBlueprintList:
   - gameObject: {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
-    iterations: 7
+    iterations: 3
   - gameObject: {fileID: 8585951724559993714, guid: b4b5f160f8b654cbdbbe9b2e2feb11dd, type: 3}
     iterations: 3
   - gameObject: {fileID: 8585951724559993714, guid: 28949f33c1e61e24db19c0b7c159f9b6, type: 3}
     iterations: 3
   - gameObject: {fileID: 1723953122851249646, guid: a3872e110230647a38fcdb9fd2a39790, type: 3}
-    iterations: 7
+    iterations: 3
   - gameObject: {fileID: 1723953122851249646, guid: 66f129141c6df45d987003eb926fa34e, type: 3}
-    iterations: 8
+    iterations: 3
   - gameObject: {fileID: 7676730838238129658, guid: ad6371d12149647feb496dbcb2d83524, type: 3}
-    iterations: 4
+    iterations: 3
+  - gameObject: {fileID: 7676730838238129658, guid: 459f4214f96084b6e97e2080dd949e15, type: 3}
+    iterations: 3
   roadPartEnd:
     gameObject: {fileID: 6975009990580726093, guid: f7230e6ac6b6b4af3901f391df7e954a, type: 3}
     iterations: 0
