@@ -106,9 +106,9 @@ public class RoadGenerator : MonoBehaviour
             GameObject previousRoadPart = this.gameObject.transform.GetChild(spawnedRoadPartCount - 1).gameObject;
             ConnectRoadParts(previousRoadPart, nextRoadPart);
 
-            if (isColliding(nextRoadPart))
+            if (IsColliding(nextRoadPart))
             {
-                fixRoad(previousRoadPart, nextRoadPart);
+                FixRoad(previousRoadPart, nextRoadPart);
             }
 
         }
@@ -119,7 +119,7 @@ public class RoadGenerator : MonoBehaviour
     /// </summary>
     /// <param name="roadPart">The road part to instantiate</param>
     /// <returns>The spawned road part GameObject</returns>
-    private GameObject spawnRoadPart(RoadPart roadPart)
+    private GameObject SpawnRoadPart(RoadPart roadPart)
     {
         GameObject spawnedRoadPart = Instantiate(roadPart.gameObject, gameObject.transform.position, Quaternion.identity);
 
@@ -151,7 +151,7 @@ public class RoadGenerator : MonoBehaviour
     /// </summary>
     /// <param name="roadPart">The road part to check</param>
     /// <returns>True if the road part collide with any other road part</returns>
-    private bool isColliding(GameObject roadPart)
+    private bool IsColliding(GameObject roadPart)
     {
         bool isColliding = false;
         Physics.SyncTransforms();
@@ -174,11 +174,16 @@ public class RoadGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Fix the road by replacing the bad road part with another one from the pending list
+    /// Fix the road by replacing the bad road part with another one from the pending list.<br/>
     /// </summary>
+    /// <remarks>
+    /// This method is a bit of a mess, but it seems to fix collisions between road part.
+    /// The "take one step back" part also seems to work, but some steps are missed after the generation.
+    /// So there is probably a better way to do this.
+    /// </remarks>
     /// <param name="previousRoadPart">The previous road part in the scene</param>
     /// <param name="badRoadPart">The bad road part that collide with another one</param>
-    private void fixRoad(GameObject previousRoadPart, GameObject badRoadPart)
+    private void FixRoad(GameObject previousRoadPart, GameObject badRoadPart)
     {
         Debug.Log($"Fixing road at step {step}");
 
@@ -197,26 +202,23 @@ public class RoadGenerator : MonoBehaviour
         // Try all the available road parts until one doesn't collide
         for (int i = availableRoadParts.Count; i > 0; i--)
         {
-            replaceRoadPartInList(badRoadPart, availableRoadParts);
+            ReplaceRoadPartInList(badRoadPart, availableRoadParts);
             GameObject newRoadPart = spawnRoadPart(this.roadPartPendingList[this.step]);
             ConnectRoadParts(previousRoadPart, newRoadPart);
 
-            if (!isColliding(newRoadPart)) { break; }
+            if (!IsColliding(newRoadPart)) { break; }
             badRoadPart = newRoadPart;
 
             // If every road part bluepint are still colliding, take one step back and try again
-            if (i == 1 && isColliding(badRoadPart))
+            if (i == 1 && IsColliding(badRoadPart))
             {
                 Debug.Log("Can't fix road, take one step back");
-
-                // Put the bad part back in the pending list, between this step and the last-before one
-                // this.roadPartPendingList.Insert(i, roadPartBlueprintList.Find(x => $"{x.gameObject.name} {i}" == badRoadPart.name));
 
                 DestroyImmediate(badRoadPart);
                 GameObject oldPreviousRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 2).gameObject;
                 GameObject oldNextRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject;
 
-                fixRoad(oldPreviousRoadPart, oldNextRoadPart);
+                FixRoad(oldPreviousRoadPart, oldNextRoadPart);
 
                 // Clean the black list for this step
                 this.roadPartBlacklist[this.step].Clear();
@@ -229,7 +231,7 @@ public class RoadGenerator : MonoBehaviour
     /// </summary>
     /// <param name="badRoadPart">The roadPart to replace</param>
     /// <param name="availableRoadPartsList">The list to go look for another potential roadPart</param>
-    private void replaceRoadPartInList(GameObject badRoadPart, List<RoadPart> availableRoadPartsList)
+    private void ReplaceRoadPartInList(GameObject badRoadPart, List<RoadPart> availableRoadPartsList)
     {
         // Remove bad road part form everywhere
         this.roadPartPendingList.RemoveAt(this.step);
