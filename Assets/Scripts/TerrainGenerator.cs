@@ -54,7 +54,6 @@ public class TerrainGenerator : MonoBehaviour
         groundPosition.y = groundLevel - 3;
         this.ground.transform.position = groundPosition;
         Instantiate(this.ground, groundPosition, Quaternion.identity);
-        this.ground.transform.parent = this.transform;
     }
 
     /// <summary>
