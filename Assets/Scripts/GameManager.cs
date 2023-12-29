@@ -54,4 +54,12 @@ public class GameManager : MonoBehaviour
             player.transform.position += movement * Time.deltaTime * movementSensibility;
         }
     }
+
+    /// <summary>
+    /// Generate the terrain.
+    /// </summary>
+    private void TerrainGenerator()
+    {
+
+    }
 }
