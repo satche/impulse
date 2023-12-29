@@ -274,17 +274,17 @@ MonoBehaviour:
   - gameObject: {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
     iterations: 3
   - gameObject: {fileID: 8585951724559993714, guid: b4b5f160f8b654cbdbbe9b2e2feb11dd, type: 3}
-    iterations: 3
+    iterations: 11
   - gameObject: {fileID: 8585951724559993714, guid: 28949f33c1e61e24db19c0b7c159f9b6, type: 3}
-    iterations: 3
+    iterations: 4
   - gameObject: {fileID: 1723953122851249646, guid: a3872e110230647a38fcdb9fd2a39790, type: 3}
     iterations: 3
   - gameObject: {fileID: 1723953122851249646, guid: 66f129141c6df45d987003eb926fa34e, type: 3}
     iterations: 3
   - gameObject: {fileID: 7676730838238129658, guid: ad6371d12149647feb496dbcb2d83524, type: 3}
-    iterations: 3
+    iterations: 1
   - gameObject: {fileID: 7676730838238129658, guid: 459f4214f96084b6e97e2080dd949e15, type: 3}
-    iterations: 3
+    iterations: 1
   roadPartEnd:
     gameObject: {fileID: 6975009990580726093, guid: f7230e6ac6b6b4af3901f391df7e954a, type: 3}
     iterations: 0
@@ -374,7 +374,7 @@ Transform:
   m_GameObject: {fileID: 1099179302}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.41000003, z: -1}
+  m_LocalPosition: {x: 0, y: 0.41000003, z: -1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -390,6 +390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1142058191}
   - component: {fileID: 1142058192}
+  - component: {fileID: 1142058193}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -424,10 +425,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce449671e9c7244b1baf9344110f11ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 2062877659}
   speed: 4
   rotationSensibility: 1
   movementSensibility: 1
+--- !u!114 &1142058193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142058189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb5c48088a45448d3a34554c0d588b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  assets:
+  - gameObject: {fileID: 8606632774571470670, guid: 8b61e12ffefeb4e6abf74d83fd582466, type: 3}
+    iterations: 17
+    minScaleVariation: 0.504
+    maxScaleVariation: 2
+    minPositionVariation: -50
+    maxPositionVariation: 150
+    minAltitudeVariation: -20
+    maxAltitudeVariation: 30
 --- !u!4 &1472173258 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8317933346199306898, guid: 5b65b59803e2044a8b9b6cd48443e695, type: 3}
@@ -490,6 +512,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1fa38a11a81f42999940516752066ab, type: 3}
+--- !u!1 &2062877659 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8657304840313395240, guid: 5b65b59803e2044a8b9b6cd48443e695, type: 3}
+  m_PrefabInstance: {fileID: 2075649722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2075649722
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -157,7 +157,7 @@ public class RoadGenerator : MonoBehaviour
 
         // List all colliders that overlap this roadpart's collider
         BoxCollider roadPartCollider = roadPart.GetComponent<BoxCollider>();
-        Collider[] colliders = Physics.OverlapBox(roadPartCollider.bounds.center, roadPartCollider.bounds.extents, roadPart.transform.rotation);
+        Collider[] colliders = Physics.OverlapBox(roadPartCollider.bounds.center, roadPartCollider.bounds.extents);
 
         foreach (Collider collider in colliders)
         {
