@@ -322,12 +322,28 @@ MonoBehaviour:
   assets:
   - gameObject: {fileID: 8606632774571470670, guid: 8b61e12ffefeb4e6abf74d83fd582466, type: 3}
     iterations: 17
-    minScaleVariation: 0.504
-    maxScaleVariation: 2
+    minScaleVariation: 0.4
+    maxScaleVariation: 1.47
     minPositionVariation: -50
     maxPositionVariation: 150
     minAltitudeVariation: 0
     maxAltitudeVariation: 30
+  - gameObject: {fileID: 6397786260812529825, guid: 08773ae1e164f4e9cbd82e9c306ad919, type: 3}
+    iterations: 4
+    minScaleVariation: 0.504
+    maxScaleVariation: 1.37
+    minPositionVariation: -17
+    maxPositionVariation: 121
+    minAltitudeVariation: 40
+    maxAltitudeVariation: 80
+  - gameObject: {fileID: 5400711305101339843, guid: c14555d6240d44c809dca8d4bf1ae518, type: 3}
+    iterations: 4
+    minScaleVariation: 0.504
+    maxScaleVariation: 1.37
+    minPositionVariation: -17
+    maxPositionVariation: 121
+    minAltitudeVariation: 40
+    maxAltitudeVariation: 80
 --- !u!4 &1037412854
 Transform:
   m_ObjectHideFlags: 0
