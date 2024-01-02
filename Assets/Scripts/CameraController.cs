@@ -8,38 +8,29 @@ public class CameraController : MonoBehaviour
     [Tooltip("The target to follow")]
     public GameObject target;
 
-    // Start is called before the first frame update
+    [Tooltip("Offset from the target")]
+    public Vector3 offset;
+
     void Start()
     {
-        // Set camera as POV if VR is active
+        // Set the camera in POV if the VR headset is active
         if (XRSettings.isDeviceActive)
         {
-            GetComponent<Camera>().transform.position.Set(0, 0.3f, 0);
+            offset = new Vector3(0, 0.3f, 0);
         }
     }
 
-    void Update()
+    void LateUpdate()
     {
-        // Follow the target
+        // Follow the target with an offset
         if (target != null)
         {
-            this.transform.position = target.transform.position;
-        }
+            // Calculate the desired position
+            Vector3 rotatedOffset = target.transform.rotation * offset;
+            this.transform.position = target.transform.position + rotatedOffset;
 
-        // Control the camera with the VR headset
-        if (XRSettings.isDeviceActive)
-        {
-            List<InputDevice> devices = new List<InputDevice>();
-            InputDevices.GetDevicesAtXRNode(XRNode.Head, devices);
-            if (devices.Count > 0)
-            {
-                InputDevice device = devices[0];
-                Quaternion rotation;
-                if (device.TryGetFeatureValue(CommonUsages.deviceRotation, out rotation))
-                {
-                    GetComponent<Camera>().transform.rotation = rotation;
-                }
-            }
+            // Make the camera look in the same direction as the target
+            this.transform.rotation = target.transform.rotation;
         }
     }
 }
