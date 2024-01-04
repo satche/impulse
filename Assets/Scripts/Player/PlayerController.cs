@@ -7,31 +7,40 @@ public class PlayerController : MonoBehaviour
 {
 
     [Tooltip("The base automatic speed of the player.")]
-    [Range(0, 10f)]
-    public float speed = 3f;
+    [Range(1f, 3f)]
+    public float speed = 1f;
 
     [Tooltip("How sensitive the player rotation is.")]
-    [Range(0, 10f)]
+    [Range(0, 3f)]
     public float rotationSensibility = 1f;
 
     [Tooltip("How sensitive the player movement is.")]
-    [Range(0, 10f)]
+    [Range(0, 3f)]
     public float movementSensibility = 1f;
 
     private UdpClientController playerUdpClient;
 
     void Start()
     {
-        // Create a new UDP client to receive the player position from the server
         playerUdpClient = new UdpClientController(5000);
+        ApplyPlayerPrefs();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        AutomaticForwardMovement(this.speed);
+        AutomaticForwardMovement(speed);
         DefinePlayerControls(playerUdpClient.IsConnected());
         DefineXRControls();
+    }
+
+    /// <summary>
+    /// Apply the player preferences
+    /// </summary>
+    private void ApplyPlayerPrefs()
+    {
+        this.speed = PlayerPrefs.GetFloat("Speed", this.speed); ;
+        this.rotationSensibility = PlayerPrefs.GetFloat("Rotation Sensibility", this.rotationSensibility); ;
+        this.movementSensibility = PlayerPrefs.GetFloat("Movement Sensibility", this.movementSensibility); ;
     }
 
     /// <summary>
