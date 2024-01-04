@@ -270,9 +270,10 @@ MonoBehaviour:
   roadPartStart:
     gameObject: {fileID: 6975009990580726093, guid: a1fa38a11a81f42999940516752066ab, type: 3}
     iterations: 0
+  roadPartStraight:
+    gameObject: {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
+    iterations: 1
   roadPartBlueprintList:
-  - gameObject: {fileID: 3059767298681398168, guid: a34469498081c6d4eb36aaf3b4d82959, type: 3}
-    iterations: 5
   - gameObject: {fileID: 8585951724559993714, guid: b4b5f160f8b654cbdbbe9b2e2feb11dd, type: 3}
     iterations: 3
   - gameObject: {fileID: 8585951724559993714, guid: 28949f33c1e61e24db19c0b7c159f9b6, type: 3}

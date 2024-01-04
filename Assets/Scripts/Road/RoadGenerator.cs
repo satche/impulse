@@ -10,6 +10,9 @@ public class RoadGenerator : MonoBehaviour
     [Tooltip("The first road part, used as a starting point for the road")]
     public RoadPart roadPartStart;
 
+    [Tooltip("A straight road part, used as a base for the road")]
+    public RoadPart roadPartStraight;
+
     [Tooltip("List of the different GameObject to use to create the road")]
     public List<RoadPart> roadPartBlueprintList = new List<RoadPart>();
 
@@ -28,9 +31,17 @@ public class RoadGenerator : MonoBehaviour
 
     void Start()
     {
+        ApplyPlayerPrefs(this.roadPartBlueprintList);
+
+        // Fix iterations
         this.roadPartStart.iterations = 1;
         this.roadPartEnd.iterations = 1;
 
+        // There is as many straight roads as other road parts
+        int totalIterations = this.roadPartBlueprintList.Sum(x => x.iterations);
+        this.roadPartStraight.iterations = totalIterations;
+
+        // Create the pending list
         this.roadPartPendingList = CreatePendingList(this.roadPartBlueprintList);
         this.roadPartPendingList = ShuffleList(this.roadPartPendingList);
 
@@ -48,6 +59,22 @@ public class RoadGenerator : MonoBehaviour
         }
 
         GenerateRoad(roadPartPendingList);
+    }
+
+    /// <summary>
+    /// Apply iterations to road part according to the player preferences
+    /// </summary>
+    /// <param name="roadPartBlueprintList">The blueprint list to apply the iterations to</params>
+    private void ApplyPlayerPrefs(List<RoadPart> roadPartBlueprintList)
+    {
+        foreach (RoadPart roadPart in roadPartBlueprintList)
+        {
+            string keyName = $"{roadPart.gameObject.name}";
+            if (PlayerPrefs.HasKey(keyName))
+            {
+                roadPart.iterations = (int)PlayerPrefs.GetFloat(keyName, roadPart.iterations);
+            }
+        }
     }
 
     /// <summary>

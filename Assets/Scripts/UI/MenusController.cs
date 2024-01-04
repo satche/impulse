@@ -40,6 +40,14 @@ public class MenusController : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 
+    /// <summary>
+    /// Quits the game.
+    /// </summary>
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public void OnSliderChange(Slider slider)
     {
         // Floor the value to one decimal
