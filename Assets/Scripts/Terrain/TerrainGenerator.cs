@@ -51,7 +51,7 @@ public class TerrainGenerator : MonoBehaviour
 
         // Set the ground position
         Vector3 groundPosition = this.roadCenter;
-        groundPosition.y = groundLevel - 3;
+        groundPosition.y = groundLevel - 1;
         this.ground.transform.position = groundPosition;
         Instantiate(this.ground, groundPosition, Quaternion.identity);
     }
