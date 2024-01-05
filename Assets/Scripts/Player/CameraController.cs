@@ -11,12 +11,24 @@ public class CameraController : MonoBehaviour
     [Tooltip("Offset from the target")]
     public Vector3 offset;
 
+    private GameObject spaceship;
+
+    private GameObject cockpit;
+
+    void Awake()
+    {
+        spaceship = GameObject.Find("Spaceship");
+        cockpit = GameObject.Find("Cockpit");
+    }
+
     void Start()
     {
         // Set the camera in POV if the VR headset is active
         if (XRSettings.isDeviceActive)
         {
-            offset = new Vector3(0, 0.3f, 0);
+            offset = new Vector3(0, 0.18f, -0.05f);
+            this.cockpit.SetActive(true);
+            this.spaceship.SetActive(false);
         }
     }
 
