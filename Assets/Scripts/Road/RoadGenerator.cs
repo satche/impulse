@@ -37,9 +37,10 @@ public class RoadGenerator : MonoBehaviour
         this.roadPartStart.iterations = 1;
         this.roadPartEnd.iterations = 1;
 
-        // There is as many straight roads as other road parts
+        // Add more straight roads parts than other road parts
         int totalIterations = this.roadPartBlueprintList.Sum(x => x.iterations);
         this.roadPartStraight.iterations = totalIterations;
+        this.roadPartBlueprintList.Add(roadPartStraight);
 
         // Create the pending list
         this.roadPartPendingList = CreatePendingList(this.roadPartBlueprintList);
@@ -69,10 +70,10 @@ public class RoadGenerator : MonoBehaviour
     {
         foreach (RoadPart roadPart in roadPartBlueprintList)
         {
-            string keyName = $"{roadPart.gameObject.name}";
-            if (PlayerPrefs.HasKey(keyName))
+            string prefKey = $"{roadPart.gameObject.name}";
+            if (PlayerPrefs.HasKey(prefKey))
             {
-                roadPart.iterations = (int)PlayerPrefs.GetFloat(keyName, roadPart.iterations);
+                roadPart.iterations = (int)PlayerPrefs.GetFloat(prefKey, roadPart.iterations);
             }
         }
     }

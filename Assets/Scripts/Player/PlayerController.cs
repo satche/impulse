@@ -18,29 +18,53 @@ public class PlayerController : MonoBehaviour
     [Range(0, 3f)]
     public float movementSensibility = 1f;
 
+    public GameObject manager;
+    private MenusController menusController;
+    private GameManager gameManager;
     private UdpClientController playerUdpClient;
+
+    void Awake()
+    {
+        this.menusController = manager.GetComponent<MenusController>();
+        this.gameManager = manager.GetComponent<GameManager>();
+        playerUdpClient = new UdpClientController(5000);
+    }
 
     void Start()
     {
-        playerUdpClient = new UdpClientController(5000);
         ApplyPlayerPrefs();
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape)) { TogglePauseGame(); }
+        if (gameManager.isPaused) { return; }
+
         AutomaticForwardMovement(speed);
         DefinePlayerControls(playerUdpClient.IsConnected());
         DefineXRControls();
     }
 
     /// <summary>
-    /// Apply the player preferences
+    /// Apply all the player preferences
     /// </summary>
     private void ApplyPlayerPrefs()
     {
-        this.speed = PlayerPrefs.GetFloat("Speed", this.speed); ;
-        this.rotationSensibility = PlayerPrefs.GetFloat("Rotation Sensibility", this.rotationSensibility); ;
-        this.movementSensibility = PlayerPrefs.GetFloat("Movement Sensibility", this.movementSensibility); ;
+        this.speed = PlayerPrefs.GetFloat("Speed", this.speed);
+        this.rotationSensibility = PlayerPrefs.GetFloat("Rotation Sensibility", this.rotationSensibility);
+        this.movementSensibility = PlayerPrefs.GetFloat("Movement Sensibility", this.movementSensibility);
+    }
+
+    /// <summary>
+    /// Toggle the pause menu
+    /// </summary>
+    public void TogglePauseGame()
+    {
+        bool gameState = gameManager.isPaused;
+
+        ApplyPlayerPrefs();
+        gameManager.PauseGame(!gameState);
+        menusController.OpenPauseMenu(!gameState);
     }
 
     /// <summary>

@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.XR;
 
 public class MenusController : MonoBehaviour
 {
@@ -12,22 +13,36 @@ public class MenusController : MonoBehaviour
 
     void Start()
     {
+        InitSlidersValues();
         SwitchMenu("Main");
     }
 
     /// <summary>
     /// Switches to the menu at the given index.
     /// </summary>
-    /// <param name="index">The index of the menu to switch to</param>
+    /// <param name="name">The name of the menu to switch to</param>
     public void SwitchMenu(string name)
     {
+        UpdateSliders();
         foreach (Canvas menu in menus)
         {
             menu.enabled = false;
-            if (menu.name == name)
-            {
-                menu.enabled = true;
-            }
+            if (menu.name == name) { menu.enabled = true; }
+        }
+    }
+
+    /// <summary>
+    /// Open the pause menu
+    /// </summary>
+    public void OpenPauseMenu(bool isPaused)
+    {
+        Canvas menu = menus.Find(m => m.name == "Pause Menu");
+        menu.enabled = isPaused;
+
+        // Update the sliders
+        foreach (Slider slider in menu.GetComponentsInChildren<Slider>())
+        {
+            UpdateSlider(slider);
         }
     }
 
@@ -48,16 +63,42 @@ public class MenusController : MonoBehaviour
         Application.Quit();
     }
 
+    private void InitSlidersValues()
+    {
+        foreach (Canvas menu in menus)
+        {
+            foreach (Slider slider in menu.GetComponentsInChildren<Slider>())
+            {
+                slider.value = PlayerPrefs.GetFloat(slider.name, slider.value);
+            }
+        }
+    }
+
     public void OnSliderChange(Slider slider)
     {
-        // Floor the value to one decimal
         slider.value = Mathf.Floor(slider.value * 10) / 10;
+        UpdateSlider(slider);
+    }
+
+    public void UpdateSliders()
+    {
+        foreach (Canvas menu in menus)
+        {
+            foreach (Slider slider in menu.GetComponentsInChildren<Slider>())
+            {
+                UpdateSlider(slider);
+            }
+        }
+    }
+
+    private void UpdateSlider(Slider slider)
+    {
+        float value = slider.value;
 
         // Update the text
         TextMeshProUGUI textValue = slider.transform.Find("Handle Slide Area/Handle/Slider Value").GetComponent<TextMeshProUGUI>();
-        textValue.text = slider.value.ToString();
+        textValue.text = value.ToString();
 
-        // Store the value in the PlayerPrefs
-        PlayerPrefs.SetFloat(slider.name, slider.value);
+        PlayerPrefs.SetFloat(slider.name, value);
     }
 }
