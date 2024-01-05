@@ -284,6 +284,30 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7078039118922591476, guid: 952ed3c7604d0419ea50f19c15e67dd0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078039118922591476, guid: 952ed3c7604d0419ea50f19c15e67dd0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078039118922591476, guid: 952ed3c7604d0419ea50f19c15e67dd0, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078039118922591476, guid: 952ed3c7604d0419ea50f19c15e67dd0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078039118922591476, guid: 952ed3c7604d0419ea50f19c15e67dd0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 851.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078039118922591476, guid: 952ed3c7604d0419ea50f19c15e67dd0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 640
+      objectReference: {fileID: 0}
     - target: {fileID: 7475820182572715221, guid: 952ed3c7604d0419ea50f19c15e67dd0, type: 3}
       propertyPath: m_Name
       value: Pause Menu

@@ -40,7 +40,7 @@ public class UdpClientController
         // Get and parse the message received from the source
         byte[] messageBytes = client.EndReceive(result, ref source);
         data = System.Text.Encoding.UTF8.GetString(messageBytes);
-        
+
         // Continue listening
         client.BeginReceive(Receiver, null);
     }
@@ -59,7 +59,7 @@ public class UdpClientController
     /// <summary>
     /// Closes the UDP client.
     /// </summary>
-    void Close()
+    public void Close()
     {
         client.Close();
     }

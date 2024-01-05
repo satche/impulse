@@ -45,6 +45,11 @@ public class PlayerController : MonoBehaviour
         DefineXRControls();
     }
 
+    private void OnDestroy()
+    {
+        this.playerUdpClient.Close();
+    }
+
     /// <summary>
     /// Apply all the player preferences
     /// </summary>
