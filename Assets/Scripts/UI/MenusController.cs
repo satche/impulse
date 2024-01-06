@@ -25,6 +25,9 @@ public class MenusController : MonoBehaviour
         SwitchMenu("Main");
     }
 
+    /// <summary>
+    /// Choses the interaction manager to use depending on the device (XR or desktop)
+    /// </summary>
     private void ChoseInteractionManager()
     {
         if (XRSettings.isDeviceActive)
@@ -85,6 +88,9 @@ public class MenusController : MonoBehaviour
         Application.Quit();
     }
 
+    /// <summary>
+    /// Initializes the sliders values with the values stored in the PlayerPrefs.
+    /// </summary>
     private void InitSlidersValues()
     {
         foreach (Canvas menu in menus)
@@ -96,12 +102,19 @@ public class MenusController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when a slider value changes.
+    /// </summary>
+    /// <param name="slider">The slider that changed</param>
     public void OnSliderChange(Slider slider)
     {
         slider.value = Mathf.Floor(slider.value * 10) / 10;
         UpdateSlider(slider);
     }
 
+    /// <summary>
+    /// Updates the value of all the sliders found in the canvas in the PlayerPrefs.
+    /// </summary>
     public void UpdateSliders()
     {
         foreach (Canvas menu in menus)
@@ -113,6 +126,10 @@ public class MenusController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the value of the given slider in the PlayerPrefs.
+    /// </summary>
+    /// <param name="slider">The slider to update</param>
     private void UpdateSlider(Slider slider)
     {
         float value = slider.value;

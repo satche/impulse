@@ -17,16 +17,12 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How sensitive the player movement is.")]
     [Range(0, 3f)]
     public float movementSensibility = 1f;
-
-    public GameObject manager;
-    private MenusController menusController;
-    private GameManager gameManager;
+    public MenusController menusController;
+    public GameManager gameManager;
     private UdpClientController playerUdpClient;
 
     void Awake()
     {
-        this.menusController = manager.GetComponent<MenusController>();
-        this.gameManager = manager.GetComponent<GameManager>();
         playerUdpClient = new UdpClientController(5000);
     }
 

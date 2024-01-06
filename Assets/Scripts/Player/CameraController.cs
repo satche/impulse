@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
         // Set the camera in POV if the VR headset is active
         if (XRSettings.isDeviceActive)
         {
-            offset = new Vector3(0, 0.17f, -0.06f);
+            // offset = new Vector3(0, 0.16f, -0.17f);
             this.cockpit.SetActive(true);
             this.spaceship.SetActive(false);
         }
