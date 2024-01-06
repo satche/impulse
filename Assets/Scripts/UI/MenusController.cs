@@ -5,16 +5,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class MenusController : MonoBehaviour
 {
     [Tooltip("All menus in the game")]
     public List<Canvas> menus;
 
+    private XRController xrController;
+
+    private void Awake()
+    {
+        xrController = GetComponent<XRController>();
+    }
+
     void Start()
     {
         InitSlidersValues();
         SwitchMenu("Main");
+    }
+
+    private void Update()
+    {
     }
 
     /// <summary>

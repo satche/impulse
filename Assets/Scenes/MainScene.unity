@@ -909,7 +909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2062877659}
-  offset: {x: 0, y: 0.08, z: -0.15}
+  offset: {x: 0, y: 0.17, z: -0.06}
 --- !u!224 &1135394175 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3036592163721903356, guid: cd424f8290f99499d8b3484838030c5b, type: 3}
@@ -1154,6 +1154,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5070119329188572025, guid: 5b65b59803e2044a8b9b6cd48443e695, type: 3}
+      propertyPath: m_Name
+      value: Spaceship
+      objectReference: {fileID: 0}
     - target: {fileID: 5070119329188572025, guid: 5b65b59803e2044a8b9b6cd48443e695, type: 3}
       propertyPath: m_IsActive
       value: 1
