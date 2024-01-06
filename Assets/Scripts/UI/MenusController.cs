@@ -12,21 +12,31 @@ public class MenusController : MonoBehaviour
     [Tooltip("All menus in the game")]
     public List<Canvas> menus;
 
-    private XRController xrController;
+    [Tooltip("GameObject responsible for XR UI interactions")]
+    public GameObject XRInteractionManager;
 
-    private void Awake()
-    {
-        xrController = GetComponent<XRController>();
-    }
+    [Tooltip("GameObject responsible for desktop UI interactions")]
+    public GameObject desktopInteractionManager;
 
     void Start()
     {
+        ChoseInteractionManager();
         InitSlidersValues();
         SwitchMenu("Main");
     }
 
-    private void Update()
+    private void ChoseInteractionManager()
     {
+        if (XRSettings.isDeviceActive)
+        {
+            desktopInteractionManager.SetActive(false);
+            XRInteractionManager.SetActive(true);
+        }
+        else
+        {
+            desktopInteractionManager.SetActive(true);
+            XRInteractionManager.SetActive(false);
+        }
     }
 
     /// <summary>
