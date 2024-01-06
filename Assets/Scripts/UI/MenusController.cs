@@ -30,6 +30,8 @@ public class MenusController : MonoBehaviour
     /// </summary>
     private void ChoseInteractionManager()
     {
+        if (XRInteractionManager == null || desktopInteractionManager == null) { return; }
+
         if (XRSettings.isDeviceActive)
         {
             desktopInteractionManager.SetActive(false);
@@ -49,25 +51,11 @@ public class MenusController : MonoBehaviour
     public void SwitchMenu(string name)
     {
         UpdateSliders();
+
         foreach (Canvas menu in menus)
         {
             menu.enabled = false;
             if (menu.name == name) { menu.enabled = true; }
-        }
-    }
-
-    /// <summary>
-    /// Open the pause menu
-    /// </summary>
-    public void OpenPauseMenu(bool isPaused)
-    {
-        Canvas menu = menus.Find(m => m.name == "Pause Menu");
-        menu.enabled = isPaused;
-
-        // Update the sliders
-        foreach (Slider slider in menu.GetComponentsInChildren<Slider>())
-        {
-            UpdateSlider(slider);
         }
     }
 

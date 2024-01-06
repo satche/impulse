@@ -8,8 +8,11 @@ public class CameraController : MonoBehaviour
     [Tooltip("The target to follow")]
     public GameObject target;
 
-    [Tooltip("Offset from the target")]
-    public Vector3 offset;
+    [Tooltip("The camera in first person, typically used to see the spaceship from the outside")]
+    public GameObject firstPersonCamera;
+
+    [Tooltip("The camera in third person, typically used for VR in the cockpit")]
+    public GameObject thirdPersonCamera;
 
     private GameObject spaceship;
 
@@ -19,33 +22,26 @@ public class CameraController : MonoBehaviour
     {
         spaceship = this.target.transform.Find("Spaceship").gameObject;
         cockpit = this.target.transform.Find("Cockpit").gameObject;
+        ChosePOV();
     }
 
-    void Start()
+    private void ChosePOV()
     {
-        this.cockpit.SetActive(false);
-        this.spaceship.SetActive(true);
-
-        // Set the camera in POV if the VR headset is active
         if (XRSettings.isDeviceActive)
         {
-            // offset = new Vector3(0, 0.16f, -0.17f);
-            this.cockpit.SetActive(true);
-            this.spaceship.SetActive(false);
+            firstPersonCamera.SetActive(true);
+            cockpit.SetActive(false);
+
+            thirdPersonCamera.SetActive(false);
+            spaceship.SetActive(false);
         }
-    }
-
-    void LateUpdate()
-    {
-        // Follow the target with an offset
-        if (target != null)
+        else
         {
-            // Calculate the desired position
-            Vector3 rotatedOffset = target.transform.rotation * offset;
-            this.transform.position = target.transform.position + rotatedOffset;
+            firstPersonCamera.SetActive(false);
+            cockpit.SetActive(false);
 
-            // Make the camera look in the same direction as the target
-            this.transform.rotation = target.transform.rotation;
+            thirdPersonCamera.SetActive(true);
+            spaceship.SetActive(true);
         }
     }
 }

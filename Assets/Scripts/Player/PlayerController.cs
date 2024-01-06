@@ -17,8 +17,13 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How sensitive the player movement is.")]
     [Range(0, 3f)]
     public float movementSensibility = 1f;
+
+    [Tooltip("The menus controller.")]
     public MenusController menusController;
+
+    [Tooltip("The game manager.")]
     public GameManager gameManager;
+
     private UdpClientController playerUdpClient;
 
     void Awake()
@@ -33,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) { TogglePauseGame(); }
+        GameStateControl();
         if (gameManager.isPaused) { return; }
 
         AutomaticForwardMovement(speed);
@@ -46,6 +51,48 @@ public class PlayerController : MonoBehaviour
         this.playerUdpClient.Close();
     }
 
+    private void GameStateControl()
+    {
+
+        bool quitGame = Input.GetKeyDown(KeyCode.Escape);
+        bool restartGame = Input.GetKeyDown(KeyCode.R);
+        bool togglePauseGame = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.P);
+
+        if (XRSettings.isDeviceActive)
+        {
+            InputDevice rightHand = GetXRNode(XRNode.RightHand);
+
+            bool primaryButtonPressed = false;
+            rightHand.TryGetFeatureValue(CommonUsages.primaryButton, out primaryButtonPressed);
+
+            bool secondaryButtonPressed = false;
+            rightHand.TryGetFeatureValue(CommonUsages.secondaryButton, out secondaryButtonPressed);
+
+            bool gripButtonPressed = false;
+            rightHand.TryGetFeatureValue(CommonUsages.gripButton, out gripButtonPressed);
+
+            quitGame = primaryButtonPressed;
+            restartGame = secondaryButtonPressed;
+            togglePauseGame = gripButtonPressed;
+        }
+
+        // Quit game
+        if (quitGame)
+        {
+            menusController.LoadScene("StartScene");
+        }
+
+        // Restart game
+        if (restartGame) { menusController.LoadScene("MainScene"); }
+
+        // Toggle pause Game
+        if (togglePauseGame)
+        {
+            bool gameState = gameManager.isPaused;
+            gameManager.PauseGame(!gameState);
+        }
+    }
+
     /// <summary>
     /// Apply all the player preferences
     /// </summary>
@@ -54,18 +101,6 @@ public class PlayerController : MonoBehaviour
         this.speed = PlayerPrefs.GetFloat("Speed", this.speed);
         this.rotationSensibility = PlayerPrefs.GetFloat("Rotation Sensibility", this.rotationSensibility);
         this.movementSensibility = PlayerPrefs.GetFloat("Movement Sensibility", this.movementSensibility);
-    }
-
-    /// <summary>
-    /// Toggle the pause menu
-    /// </summary>
-    public void TogglePauseGame()
-    {
-        bool gameState = gameManager.isPaused;
-
-        ApplyPlayerPrefs();
-        gameManager.PauseGame(!gameState);
-        menusController.OpenPauseMenu(!gameState);
     }
 
     /// <summary>
@@ -117,10 +152,12 @@ public class PlayerController : MonoBehaviour
             Vector3 handPosition;
             Quaternion handRotation;
 
+            Camera camera = this.transform.Find("FirstPersonCamera").GetComponent<Camera>();
+
             if (rightHand.TryGetFeatureValue(CommonUsages.devicePosition, out handPosition) && rightHand.TryGetFeatureValue(CommonUsages.deviceRotation, out handRotation))
             {
-                // Create a new Quaternion with the modified y component
-                Quaternion newRotation = Quaternion.Euler(handRotation.eulerAngles.x, handRotation.eulerAngles.y * rotationSensibility, handRotation.eulerAngles.z);
+                // Only y axis is used for the rotation
+                Quaternion newRotation = Quaternion.Euler(0, handRotation.eulerAngles.y, 0);
                 this.transform.rotation = newRotation;
             }
 
@@ -129,7 +166,7 @@ public class PlayerController : MonoBehaviour
             Quaternion headsetRotation;
             if (headset.TryGetFeatureValue(CommonUsages.deviceRotation, out headsetRotation))
             {
-                GetComponent<Camera>().transform.rotation = headsetRotation;
+                camera.transform.localRotation = headsetRotation;
             }
         }
     }
