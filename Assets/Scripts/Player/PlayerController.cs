@@ -39,11 +39,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GameStateControl();
+        WatchPlayerControls();
+        WatchXRControls();
         if (gameManager.isPaused) { return; }
 
         AutomaticForwardMovement(speed);
-        DefinePlayerControls(playerUdpClient.IsConnected());
-        DefineXRControls();
     }
 
     private void OnDestroy()
@@ -71,9 +71,9 @@ public class PlayerController : MonoBehaviour
             bool gripButtonPressed = false;
             rightHand.TryGetFeatureValue(CommonUsages.gripButton, out gripButtonPressed);
 
-            quitGame = primaryButtonPressed;
+            quitGame = gripButtonPressed;
             restartGame = secondaryButtonPressed;
-            togglePauseGame = gripButtonPressed;
+            togglePauseGame = primaryButtonPressed;
         }
 
         // Quit game
@@ -118,9 +118,9 @@ public class PlayerController : MonoBehaviour
     /// Define the player controls according if there is a connection to the UDP server or not
     /// </summary>
     /// <param name="isConnectedToUdpServer">True if the player is connected to the UDP server</param>
-    private void DefinePlayerControls(bool isConnectedToUdpServer)
+    private void WatchPlayerControls()
     {
-        if (isConnectedToUdpServer)
+        if (playerUdpClient.IsConnected())
         {
             PositionManager pm = this.GetComponent<PositionManager>();
             pm.updatePosition(playerUdpClient?.data);
@@ -143,22 +143,25 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Define the XR controls if the VR headset is active
     /// </summary>
-    private void DefineXRControls()
+    private void WatchXRControls()
     {
         if (XRSettings.isDeviceActive)
         {
+
             // Control player with right controller
             InputDevice rightHand = GetXRNode(XRNode.RightHand);
-            Vector3 handPosition;
-            Quaternion handRotation;
+            Vector2 primary2DAxisInput;
 
             Camera camera = this.transform.Find("FirstPersonCamera").GetComponent<Camera>();
 
-            if (rightHand.TryGetFeatureValue(CommonUsages.devicePosition, out handPosition) && rightHand.TryGetFeatureValue(CommonUsages.deviceRotation, out handRotation))
+            if (rightHand.TryGetFeatureValue(CommonUsages.primary2DAxis, out primary2DAxisInput))
             {
+                // Use the x value of the joystick or touchpad to control the rotation
+                float rotationY = primary2DAxisInput.x * 5 * rotationSensibility * Time.deltaTime;
+
                 // Only y axis is used for the rotation
-                Quaternion newRotation = Quaternion.Euler(0, handRotation.eulerAngles.y, 0);
-                this.transform.rotation = newRotation;
+                Quaternion newRotation = Quaternion.Euler(0, rotationY, 0);
+                this.transform.rotation *= newRotation;
             }
 
             // Control camera with headset

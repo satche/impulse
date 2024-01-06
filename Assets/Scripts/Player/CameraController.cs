@@ -27,10 +27,11 @@ public class CameraController : MonoBehaviour
 
     private void ChosePOV()
     {
-        if (XRSettings.isDeviceActive)
+        if (true) // XRSettings.isDeviceActive
         {
             firstPersonCamera.SetActive(true);
-            cockpit.SetActive(false);
+            cockpit.SetActive(true);
+            firstPersonCamera.GetComponent<Camera>().nearClipPlane = 0.1f;
 
             thirdPersonCamera.SetActive(false);
             spaceship.SetActive(false);
