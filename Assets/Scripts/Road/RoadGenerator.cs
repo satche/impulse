@@ -193,7 +193,7 @@ public class RoadGenerator : MonoBehaviour
             if (collider != roadPartCollider && collider.gameObject.tag == "RoadPart")
             {
                 isColliding = true;
-                Debug.LogError($"{roadPart.name} collides with {collider.gameObject.name}");
+                Debug.Log($"{roadPart.name} collides with {collider.gameObject.name}");
             }
         }
 
@@ -211,7 +211,7 @@ public class RoadGenerator : MonoBehaviour
     /// <param name="badRoadPart">The bad road part that collide with another one</param>
     private void FixRoad(GameObject previousRoadPart, GameObject badRoadPart)
     {
-        Debug.LogWarning($"Fixing road at step {step}");
+        Debug.Log($"Fixing road at step {step}");
 
         // Initialize the blacklist for this step if it doesn't exist
         if (!this.roadPartBlacklist.ContainsKey(step))
@@ -243,7 +243,7 @@ public class RoadGenerator : MonoBehaviour
             // If every road part bluepint are still colliding, take one step back and try again
             if (i == 1 && IsColliding(badRoadPart))
             {
-                Debug.LogError("Can't fix road, take one step back");
+                Debug.Log("Can't fix road, take one step back");
                 this.step--;
 
                 DestroyImmediate(badRoadPart);
