@@ -125,10 +125,10 @@ public class RoadGenerator : MonoBehaviour
         {
             int spawnedRoadPartCount = this.gameObject.transform.childCount;
 
-            Debug.Log($"Step {this.step}");
+            Debug.Log($"Step {this.step}: {roadPartPendingList[this.step].gameObject.name}");
 
             GameObject nextRoadPart = SpawnRoadPart(roadPartPendingList[this.step]);
-            if (spawnedRoadPartCount == 0) { continue; }
+            if (spawnedRoadPartCount == 0) { continue; } // this is the very first road part, no need to connect it to the previous one
 
             GameObject previousRoadPart = this.gameObject.transform.GetChild(spawnedRoadPartCount - 1).gameObject;
             ConnectRoadParts(previousRoadPart, nextRoadPart);
@@ -193,7 +193,7 @@ public class RoadGenerator : MonoBehaviour
             if (collider != roadPartCollider && collider.gameObject.tag == "RoadPart")
             {
                 isColliding = true;
-                Debug.Log($"{roadPart.name} collides with {collider.gameObject.name}");
+                Debug.LogError($"{roadPart.name} collides with {collider.gameObject.name}");
             }
         }
 
@@ -211,7 +211,7 @@ public class RoadGenerator : MonoBehaviour
     /// <param name="badRoadPart">The bad road part that collide with another one</param>
     private void FixRoad(GameObject previousRoadPart, GameObject badRoadPart)
     {
-        Debug.Log($"Fixing road at step {step}");
+        Debug.LogWarning($"Fixing road at step {step}");
 
         // Initialize the blacklist for this step if it doesn't exist
         if (!this.roadPartBlacklist.ContainsKey(step))
@@ -232,13 +232,19 @@ public class RoadGenerator : MonoBehaviour
             GameObject newRoadPart = SpawnRoadPart(this.roadPartPendingList[this.step]);
             ConnectRoadParts(previousRoadPart, newRoadPart);
 
-            if (!IsColliding(newRoadPart)) { break; }
+            if (!IsColliding(newRoadPart))
+            {
+                Debug.Log($"Step {step} fixed with {newRoadPart.name}");
+                break;
+            }
+
             badRoadPart = newRoadPart;
 
             // If every road part bluepint are still colliding, take one step back and try again
             if (i == 1 && IsColliding(badRoadPart))
             {
-                Debug.Log("Can't fix road, take one step back");
+                Debug.LogError("Can't fix road, take one step back");
+                this.step--;
 
                 DestroyImmediate(badRoadPart);
                 GameObject oldPreviousRoadPart = gameObject.transform.GetChild(gameObject.transform.childCount - 2).gameObject;
