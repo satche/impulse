@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
             if (rightHand.TryGetFeatureValue(CommonUsages.primary2DAxis, out primary2DAxisInput))
             {
                 // Use the x value of the joystick or touchpad to control the rotation
-                float rotationY = primary2DAxisInput.x * 5 * rotationSensibility * Time.deltaTime;
+                float rotationY = primary2DAxisInput.x * 15 * rotationSensibility * Time.deltaTime;
 
                 // Only y axis is used for the rotation
                 Quaternion newRotation = Quaternion.Euler(0, rotationY, 0);
