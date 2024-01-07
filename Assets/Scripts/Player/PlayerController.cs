@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
         if (gameManager.isPaused) { return; }
 
         AutomaticForwardMovement(speed);
+        CheckForFall();
     }
 
     private void OnDestroy()
@@ -112,6 +113,17 @@ public class PlayerController : MonoBehaviour
         // Give a constant movement toward the facing direction
         Vector3 automaticMovement = this.transform.forward;
         this.transform.position += automaticMovement * Time.deltaTime * speed;
+    }
+
+    /// <summary>
+    /// Check if the player has fallen. If so, go back to main menu
+    /// </summary>
+    private void CheckForFall()
+    {
+        if (this.transform.position.y < -50)
+        {
+            menusController.LoadScene("StartScene");
+        }
     }
 
     /// <summary>
@@ -185,7 +197,7 @@ public class PlayerController : MonoBehaviour
             Quaternion headsetRotation;
             if (headset.TryGetFeatureValue(CommonUsages.deviceRotation, out headsetRotation))
             {
-                camera.transform.localRotation = headsetRotation;
+                GetComponent<Camera>().transform.localRotation = headsetRotation;
             }
         }
     }
