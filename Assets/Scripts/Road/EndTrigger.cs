@@ -14,7 +14,7 @@ public class EndTrigger : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, Mathf.PingPong(Time.time, 1), transform.position.z);
+        transform.localPosition = new Vector3(transform.localPosition.x, Mathf.PingPong(Time.time, 0.7f), transform.localPosition.z);
 
         Collider thisCollider = GetComponent<Collider>();
         Collider playerCollider = player.GetComponent<Collider>();
