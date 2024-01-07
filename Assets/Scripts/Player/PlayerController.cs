@@ -161,20 +161,23 @@ public class PlayerController : MonoBehaviour
         if (XRSettings.isDeviceActive)
         {
 
-            // Control player with right controller
-            InputDevice rightHand = GetXRNode(XRNode.RightHand);
-            Vector2 primary2DAxisInput;
-
-            Camera camera = this.transform.Find("FirstPersonCamera").GetComponent<Camera>();
-
-            if (rightHand.TryGetFeatureValue(CommonUsages.primary2DAxis, out primary2DAxisInput))
+            if (!playerUdpClient.IsConnected())
             {
-                // Use the x value of the joystick or touchpad to control the rotation
-                float rotationY = primary2DAxisInput.x * 15 * rotationSensibility * Time.deltaTime;
+                // Control player with right controller
+                InputDevice rightHand = GetXRNode(XRNode.RightHand);
+                Vector2 primary2DAxisInput;
 
-                // Only y axis is used for the rotation
-                Quaternion newRotation = Quaternion.Euler(0, rotationY, 0);
-                this.transform.rotation *= newRotation;
+                Camera camera = this.transform.Find("FirstPersonCamera").GetComponent<Camera>();
+
+                if (rightHand.TryGetFeatureValue(CommonUsages.primary2DAxis, out primary2DAxisInput))
+                {
+                    // Use the x value of the joystick or touchpad to control the rotation
+                    float rotationY = primary2DAxisInput.x * 15 * rotationSensibility * Time.deltaTime;
+
+                    // Only y axis is used for the rotation
+                    Quaternion newRotation = Quaternion.Euler(0, rotationY, 0);
+                    this.transform.rotation *= newRotation;
+                }
             }
 
             // Control camera with headset

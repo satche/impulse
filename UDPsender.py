@@ -3,7 +3,7 @@ import random
 import time
 import pyautogui
 
-UDP_IP = "127.0.0.1"
+UDP_IP = "192.168.1.112" # VR headset: 192.168.1.112
 UDP_PORT = 5000
 
 # File to read data from
