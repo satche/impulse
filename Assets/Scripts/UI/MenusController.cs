@@ -96,7 +96,7 @@ public class MenusController : MonoBehaviour
     /// <param name="slider">The slider that changed</param>
     public void OnSliderChange(Slider slider)
     {
-        slider.value = Mathf.Floor(slider.value * 10) / 10;
+        slider.value = Mathf.Round(slider.value * 2) / 2;
         UpdateSlider(slider);
     }
 
