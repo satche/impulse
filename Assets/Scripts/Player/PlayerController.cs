@@ -172,15 +172,14 @@ public class PlayerController : MonoBehaviour
     {
         if (XRSettings.isDeviceActive)
         {
+            Camera camera = this.transform.Find("FirstPersonCamera").GetComponent<Camera>();
+            InputDevice rightHand = GetXRNode(XRNode.RightHand);
+            InputDevice headset = GetXRNode(XRNode.Head);
 
             if (!playerUdpClient.IsConnected())
             {
                 // Control player with right controller
-                InputDevice rightHand = GetXRNode(XRNode.RightHand);
                 Vector2 primary2DAxisInput;
-
-                Camera camera = this.transform.Find("FirstPersonCamera").GetComponent<Camera>();
-
                 if (rightHand.TryGetFeatureValue(CommonUsages.primary2DAxis, out primary2DAxisInput))
                 {
                     // Use the x value of the joystick or touchpad to control the rotation
@@ -193,11 +192,10 @@ public class PlayerController : MonoBehaviour
             }
 
             // Control camera with headset
-            InputDevice headset = GetXRNode(XRNode.Head);
             Quaternion headsetRotation;
             if (headset.TryGetFeatureValue(CommonUsages.deviceRotation, out headsetRotation))
             {
-                GetComponent<Camera>().transform.localRotation = headsetRotation;
+                camera.transform.localRotation = headsetRotation;
             }
         }
     }
