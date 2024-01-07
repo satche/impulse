@@ -8,7 +8,7 @@ UDP_PORT = 5000
 
 # File to read data from
 # DATA = "data-30sec.txt"
-DATA = ""
+DATA = "data-30sec.txt"
 refreshRate = 0.02
 
 # Initialize spatial values

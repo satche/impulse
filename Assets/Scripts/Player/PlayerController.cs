@@ -123,20 +123,33 @@ public class PlayerController : MonoBehaviour
         if (playerUdpClient.IsConnected())
         {
             PositionManager pm = this.GetComponent<PositionManager>();
-            pm.updatePosition(playerUdpClient?.data);
+            float[] newPosition = pm.updatePosition(playerUdpClient?.data);
+
+            float x = newPosition[0];
+            float y = newPosition[2];
+            float z = newPosition[1];
+
+            float theta_x = newPosition[3];
+            float theta_y = newPosition[4] * rotationSensibility;
+            float theta_z = newPosition[5];
+
+            Vector3 movement = new Vector3(x, 0, z);
+            this.transform.position += movement * Time.deltaTime * movementSensibility;
+
+            Quaternion newRotation = Quaternion.Euler(theta_x, theta_y, theta_z);
         }
         else
         {
-            // Rotate the player with the mouse (horizontal axis only)
-            float mouseX = Input.GetAxis("Mouse X");
-            Vector3 rotation = this.transform.rotation.eulerAngles;
-            this.transform.rotation = Quaternion.Euler(rotation.x, rotation.y + mouseX * rotationSensibility, rotation.z);
-
             // Shift the player with the keyboard, according to the camera facing direction
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
             Vector3 movement = this.transform.right * horizontal + this.transform.forward * vertical;
             this.transform.position += movement * Time.deltaTime * movementSensibility;
+
+            // Rotate the player with the mouse (horizontal axis only)
+            float mouseX = Input.GetAxis("Mouse X");
+            Vector3 rotation = this.transform.rotation.eulerAngles;
+            this.transform.rotation = Quaternion.Euler(rotation.x, rotation.y + mouseX * rotationSensibility, rotation.z);
         }
     }
 

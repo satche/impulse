@@ -47,18 +47,22 @@ public class PositionManager : MonoBehaviour
     /// Updates the position of the game object based on the provided spatial data.
     /// </summary>
     /// <param name="data">A string with coordinates and angles: (x, y, z, theta_x, theta_y, theta_z)</param>
-    public void updatePosition(string data)
+    public float[] updatePosition(string data)
     {
         // Store the spatial values in the class properties
         StoreSpatialValues(data);
         NormalizeValues();
 
         // Update game object position and angle    
-        Vector3 newPosition = new Vector3(coordinates[0], coordinates[1], coordinates[2]);
-        Vector3 newAngle = new Vector3(angles[0], angles[1], angles[2]);
-        transform.position = newPosition;
-        transform.eulerAngles = newAngle;
+        float x = coordinates[0];
+        float y = coordinates[2];
+        float z = coordinates[1];
 
+        float theta_x = angles[0];
+        float theta_y = angles[1];
+        float theta_z = angles[2];
+
+        return new float[6] { x, y, z, theta_x, theta_y, theta_z };
     }
 
     /// <summary>
