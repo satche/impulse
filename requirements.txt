@@ -1,7 +1,7 @@
 certifi==2023.7.22
 contourpy==1.0.5
 cycler==0.11.0
-fonttools==4.37.4
+fonttools==4.43.0
 imageio==2.22.0
 kiwisolver==1.4.4
 matplotlib==3.6.0
