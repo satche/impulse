@@ -28,7 +28,7 @@ You plan on first person view.
 
 ## Screenshots and videos
 
-![Example of play with belt device](<videos/device-play.mp4>)
+https://github.com/satche/impulse/assets/43775040/8e9c4af6-cd6a-4cdb-bf40-d06aa477ea81
 
 ![Screenshot of main menu](<imgs/main-menu.png>)
 ![Screenshot of player settings](<imgs/player-settings.png>)
