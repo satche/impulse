@@ -32,7 +32,7 @@ public class MenusController : MonoBehaviour
     {
         if (XRInteractionManager == null || desktopInteractionManager == null) { return; }
 
-        if (XRSettings.isDeviceActive)
+        if (true)
         {
             desktopInteractionManager.SetActive(false);
             XRInteractionManager.SetActive(true);

@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
 
     private void ChosePOV()
     {
-        if (XRSettings.isDeviceActive)
+        if (true)
         {
             firstPersonCamera.SetActive(true);
             cockpit.SetActive(true);
